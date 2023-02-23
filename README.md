@@ -27,6 +27,7 @@
     - 分别配置opsmaster.conf和opsservant.conf配置文件
     - 分别在opsmaster和opsservant项目下启动: pdm run python main.py
 ```
+
   <!-- - docker部署
     - 运维主机和游戏主机安装docker服务
     - 将opsmaster和opsservant项目上传到运维主机和游戏主机
