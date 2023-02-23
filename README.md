@@ -14,7 +14,7 @@
   - 技术栈: fastapi + celery + grpc + vue-admin-template
 ```
 
-* ![展示](./img/ops.png)
+![展示](./img/ops.png)
 
 * *部署*
 ```
