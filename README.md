@@ -26,7 +26,7 @@
     - 使用pdm分别将opsmaster和opsservant所需要的依赖包进行更新: pdm update
     - 分别配置opsmaster.conf和opsservant.conf配置文件
     - 分别在opsmaster和opsservant项目下启动: pdm run python main.py
-
+```
   <!-- - docker部署
     - 运维主机和游戏主机安装docker服务
     - 将opsmaster和opsservant项目上传到运维主机和游戏主机
@@ -35,5 +35,5 @@
       - docker build -t pro-opsservant .
     - 分别在运维主机和游戏主机上根据pro-opsmaster和pro-opsservant镜像启动对应的容器:
       - docker run --name opsmaster --rm -p 8888:8888 -itd pro-opsmaster
-      - docker run --name opsservant --rm -p 8887:8887 -v /data/game:/data/game -itd pro-opsservant -->
-```
+      - docker run --name opsservant --rm -p 8887:8887 -v /data/game:/data/game -itd pro-opsservant
+  -->
