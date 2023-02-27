@@ -2,7 +2,7 @@ import os
 import typing
 import grpc
 from concurrent import futures
-from app import AppConfig, core
+from app import AppConfig, core, AppLogger
 from app.grpc.zone import zone_pb2, zone_pb2_grpc
 
 
@@ -34,10 +34,25 @@ class SignatureInterceptor(grpc.aio.ServerInterceptor):
         handler_call_details: grpc.HandlerCallDetails
     ) -> grpc.RpcMethodHandler:
         method_name = handler_call_details.method.split("/")[-1]
-        expected_metadata = ("x-signature", method_name[::-1])
+        expected_metadata = (AppConfig.get("app", "rpcKey"), method_name[::-1])
         if expected_metadata in handler_call_details.invocation_metadata:
             return continuation(handler_call_details)
         return self._abort_handler
+
+
+class LoggerInterceptor(grpc.aio.ServerInterceptor):
+    def __init__(self):
+        pass
+
+    def intercept_service(
+        self,
+        continuation: typing.Callable[
+            [grpc.HandlerCallDetails], typing.Awaitable[grpc.RpcMethodHandler]
+        ],
+        handler_call_details: grpc.HandlerCallDetails
+    ) -> None:
+        method_name = method_name = handler_call_details.method.split("/")[-1]
+        AppLogger.info("调用了方法: ", method_name)
 
 
 class ZoneService(zone_pb2_grpc.ZoneServicer):
@@ -63,7 +78,7 @@ def start_server() -> typing.Tuple[grpc.Server, int]:
     server = grpc.server(
         futures.ThreadPoolExecutor(
             max_workers=AppConfig.getint("app", "worker")),
-            interceptors=(SignatureInterceptor(),))
+            interceptors=(SignatureInterceptor(), LoggerInterceptor()))
     zone_pb2_grpc.add_ZoneServicer_to_server(ZoneService(), server)
     server_credentials = grpc.ssl_server_credentials(
         ((server_key, server_crt), ), root_cert, True)

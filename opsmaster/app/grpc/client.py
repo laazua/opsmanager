@@ -27,7 +27,7 @@ class AuthGateway(grpc.AuthMetadataPlugin):
         callback: grpc.AuthMetadataPluginCallback
     ) -> None:
         signature = context.method_name[::-1]
-        callback((("x-signature", signature), ), None)
+        callback(((AppConfig.get("app", "rpcKey"), signature), ), None)
 
 
 @contextlib.contextmanager
